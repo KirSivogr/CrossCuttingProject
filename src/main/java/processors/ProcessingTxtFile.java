@@ -29,11 +29,21 @@ public class ProcessingTxtFile {
     public static void writeToFile(String outputFileName) throws Exception {
         FileWriter fw = new FileWriter(outputFileName);
         List<String> dataFromFile = readFromFile();
-        for (int i = 0; i < dataFromFile.size(); i++) {
-            RPN rpn = new RPN(dataFromFile.get(i));
-            fw.write(Double.toString(rpn.RPNToAnswer()) + '\n');
+        List<String> calculatedData = calculate(dataFromFile);
+        for (int i = 0; i < calculatedData.size(); i++) {
+            fw.write(calculatedData.get(i) + '\n');
         }
         fw.flush();
+    }
+
+    public static List<String> calculate(List<String> expressions) throws Exception {
+        List<String> calculated = new ArrayList<>();
+        for (int i = 0; i < expressions.size(); i++) {
+            RPN rpn = new RPN(expressions.get(i));
+            String result = rpn.RPNToAnswer().toString();
+            calculated.add(result);
+        }
+        return calculated;
     }
 
 }
