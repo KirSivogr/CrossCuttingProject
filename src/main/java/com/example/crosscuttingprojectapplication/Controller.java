@@ -8,6 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
+import processors.ProcessingJsonFile;
+import processors.ProcessingTxtFile;
+import processors.ProcessingXmlFile;
+
 public class Controller {
     private Stage stage;
     @FXML
@@ -68,16 +72,16 @@ public class Controller {
         boolean isNeedZip = radioButtonYes.isSelected();
         boolean isNeedEncrypt = radioButtonYes1.isSelected();
         if (radioButtonJSON.isSelected()) {
-           // ProcessingJsonFile pjf = new ProcessingJsonFile(inputFileName);
-           // pjf.writeToFile(outputFileName);
+            ProcessingJsonFile pjf = new ProcessingJsonFile(inputFileName);
+            pjf.writeToFile(outputFileName);
         }
         else if (radioButtonTXT.isSelected()) {
-           // ProcessingTxtFile ptf = new ProcessingTxtFile(inputFileName);
-           // ptf.writeToFile(outputFileName);
+            ProcessingTxtFile ptf = new ProcessingTxtFile(inputFileName);
+            ptf.writeToFile(outputFileName);
         }
         else {
-            //ProcessingXmlFile pxf = new ProcessingXmlFile(inputFileName);
-            //pxf.writeToFile(outputFileName);
+            ProcessingXmlFile pxf = new ProcessingXmlFile(inputFileName);
+            pxf.writeToFile(outputFileName);
         }
         stage = (Stage) calculateButton.getScene().getWindow();
         stage.close();
