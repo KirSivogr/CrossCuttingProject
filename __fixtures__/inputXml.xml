@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <expression>2*42-32</expression>
+    <expression>3232*20-32+4322/2</expression>
+    <expression>(32131-432*543)/32</expression>
+</root>
