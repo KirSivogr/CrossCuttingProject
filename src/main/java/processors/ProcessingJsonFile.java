@@ -40,15 +40,28 @@ public class ProcessingJsonFile {
     public static void writeToFile(String outputFileName) throws Exception {
         JSONArray resultArray = new JSONArray();
         List<List<String>> dataFromFile = readFromFile();
-        for (int i = 0; i < dataFromFile.size(); i++) {
+        List<List<String>> calculatedData = calculate(dataFromFile);
+        for (int i = 0; i < calculatedData.size(); i++) {
             JSONObject object = new JSONObject();
-            for (int j = 0; j < dataFromFile.get(i).size(); j++) {
-                RPN rpn = new RPN(dataFromFile.get(i).get(j));
-                Double result = rpn.RPNToAnswer();
-                object.put("expression" + Integer.toString(j + 1), result.toString());
+            for (int j = 0; j < calculatedData.get(i).size(); j++) {
+                object.put("expression" + Integer.toString(j + 1), calculatedData.get(i).get(j));
             }
             resultArray.add(object);
         }
         Files.write(Paths.get(outputFileName),resultArray.toJSONString().getBytes());
+    }
+
+    public static List<List<String>> calculate(List<List<String>> expressions) throws Exception {
+        List<List<String>> calculated = new ArrayList<>();
+        calculated.add(0, new ArrayList<>());
+        for (int i = 0; i < expressions.size(); i++) {
+            for (int j = 0; j < expressions.get(i).size(); j++) {
+                RPN rpn = new RPN(expressions.get(i).get(j));
+                String result = rpn.RPNToAnswer().toString();
+                calculated.get(i).add(result);
+            }
+            calculated.add(i + 1, new ArrayList<>());
+        }
+        return calculated;
     }
 }
