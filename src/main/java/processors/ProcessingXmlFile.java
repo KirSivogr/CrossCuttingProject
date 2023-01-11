@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProcessingXmlFile {
     private static String inputFileName;
@@ -22,11 +23,11 @@ public class ProcessingXmlFile {
     public ProcessingXmlFile(String inputFName) {
         inputFileName = inputFName;
     }
-    public ArrayList readFromFile() throws Exception {
+    public List<String> readFromFile() throws Exception {
         File file = new File(inputFileName);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document doc = null;
-        ArrayList list = new ArrayList();
+        List<String> list = new ArrayList<>();
         doc = dbf.newDocumentBuilder().parse(file);
         NodeList nodeList = doc.getElementsByTagName("expression");
         for(int i = 0; i < nodeList.getLength();i++){
@@ -44,12 +45,12 @@ public class ProcessingXmlFile {
 
         document.appendChild(rootElement);
 
-        ArrayList list = readFromFile();
-        for(int i = 0; i < list.size();i++){
+        List<String> dataFromFile = readFromFile();
+        List<String> calculatedData = calculated(dataFromFile);
+        for(int i = 0; i < calculatedData.size();i++){
             String element = "expression";
             Element em = document.createElement(element);
-            RPN rpn = new RPN(list.get(i).toString());
-            em.appendChild(document.createTextNode('\n' + rpn.RPNToAnswer().toString() + '\n'));
+            em.appendChild(document.createTextNode(calculatedData.get(i)));
             rootElement.appendChild(em);
         }
 
@@ -61,5 +62,15 @@ public class ProcessingXmlFile {
         transformer.transform(source, result);
         fileOutputStream.close();
 
+    }
+
+    public List<String> calculated(List<String> expressions) throws Exception {
+        List<String> calculated = new ArrayList<>();
+        for (int i = 0; i < expressions.size(); i++) {
+            RPN rpn = new RPN(expressions.get(i));
+            String result = rpn.RPNToAnswer().toString();
+            calculated.add(result);
+        }
+        return calculated;
     }
 }
