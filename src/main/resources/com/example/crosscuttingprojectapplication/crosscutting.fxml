@@ -17,8 +17,8 @@
             </font>
         </Label>
         <TextField fx:id="inputField" layoutX="14.0" layoutY="41.0" prefHeight="25.0" prefWidth="269.0" promptText="Путь до входного файла" />
-        <Button fx:id="inputButton" layoutX="14.0" layoutY="79.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="269.0" text="Выбрать" />
-        <Button fx:id="outputButton" layoutX="299.0" layoutY="79.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="286.0" text="Выбрать" />
+        <Button fx:id="inputButton" layoutX="14.0" layoutY="79.0" mnemonicParsing="false" onAction="#selectInputFile" prefHeight="31.0" prefWidth="269.0" text="Выбрать" />
+        <Button fx:id="outputButton" layoutX="299.0" layoutY="79.0" mnemonicParsing="false" onAction="#selectInputFile" prefHeight="31.0" prefWidth="286.0" text="Выбрать" />
         <TextField fx:id="outputField" layoutX="299.0" layoutY="43.0" prefHeight="25.0" prefWidth="286.0" promptText="Путь до выходного файла" />
         <Label layoutX="299.0" layoutY="14.0" prefHeight="20.0" prefWidth="269.0" text="Введите путь до выходного файла">
             <font>
