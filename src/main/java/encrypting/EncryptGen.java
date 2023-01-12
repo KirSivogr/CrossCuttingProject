@@ -3,6 +3,7 @@ package encrypting;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Base64;
 
 public class EncryptGen {
     static private byte[] KEYVALUE = "6^)(9-p35@%3#4S!4S0)$Y%%^&5(j.&^&o(*0)$Y%!#O@*GpG@=+@j.&6^)(0-=+".getBytes();;
@@ -14,7 +15,7 @@ public class EncryptGen {
         KEYVALUE = key.getBytes();
     }
 
-    public static void EncryptFile(String oldFile, String newFile) throws Exception {
+    public static void encryptFile(String oldFile, String newFile) throws Exception {
         FileInputStream in = new FileInputStream(oldFile);
         File file = new File(newFile);
         if (!file.exists())
@@ -37,7 +38,7 @@ public class EncryptGen {
         out.close();
     }
 
-    public static void DecryptFile(String oldFile, String newFile) throws Exception {
+    public static void decryptFile(String oldFile, String newFile) throws Exception {
         FileInputStream in = new FileInputStream(oldFile);
         File file = new File(newFile);
         if (!file.exists())
