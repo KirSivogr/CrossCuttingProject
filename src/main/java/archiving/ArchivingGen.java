@@ -8,7 +8,7 @@ import java.util.zip.ZipOutputStream;
 
 public class ArchivingGen {
     public ArchivingGen() {}
-    public static void archiving(String filename , String directoryname) throws java.io.IOException {
+    public static void zipFile(String filename , String directoryname) throws java.io.IOException {
         try(ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(directoryname));
             FileInputStream fis= new FileInputStream(filename);)
         {
@@ -23,7 +23,7 @@ public class ArchivingGen {
             System.out.println(ex.getMessage());
         }
     }
-    public static void unarchiving(String filename, String directoryname) throws java.io.IOException {
+    public static void unzipFile(String filename, String directoryname) throws java.io.IOException {
         ZipInputStream zin = new ZipInputStream(new FileInputStream(filename));
         ZipEntry entry;
         while((entry = zin.getNextEntry()) != null) {
