@@ -13,15 +13,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcessingJsonFile {
+public class ProcessingJsonFile implements ProcessingFile{
     private static String inputFileName;
     public ProcessingJsonFile(String inputFName) {
         inputFileName = inputFName;
     }
-
-    public static List<List<String>> readFromFile() throws ParseException, IOException {
-        List<List<String>> readFile = new ArrayList<>();
-        readFile.add(0, new ArrayList<>());
+    public List<String> readFromFile() throws IOException, ParseException {
+        List<String> readFile = new ArrayList<>();
         FileReader reader = new FileReader(inputFileName);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(reader);
@@ -29,38 +27,27 @@ public class ProcessingJsonFile {
         for(int i = 0; i < array.size(); i++) {
             JSONObject object = (JSONObject) array.get(i);
             for(int j = 0; j < object.size(); j++) {
-                readFile.get(i).add(object.get("expression" + Integer.toString(j + 1)).toString());
-            }
-            if(i + 1 != array.size()) {
-                readFile.add(i + 1, new ArrayList<>());
+                readFile.add(object.get("expression" + Integer.toString(j + 1)).toString());
             }
         }
         return readFile;
     }
-    public static void writeToFile(String outputFileName) throws Exception {
-        JSONArray resultArray = new JSONArray();
-        List<List<String>> dataFromFile = readFromFile();
-        List<List<String>> calculatedData = calculate(dataFromFile);
+    public void writeToFile(String outputFileName) throws Exception {
+        List<String> dataFromFile = readFromFile();
+        List<String> calculatedData = calculate(dataFromFile);
+        JSONObject resultObject = new JSONObject();
         for (int i = 0; i < calculatedData.size(); i++) {
-            JSONObject object = new JSONObject();
-            for (int j = 0; j < calculatedData.get(i).size(); j++) {
-                object.put("expression" + Integer.toString(j + 1), calculatedData.get(i).get(j));
-            }
-            resultArray.add(object);
+                resultObject.put("expression" + Integer.toString(i + 1), calculatedData.get(i));
         }
-        Files.write(Paths.get(outputFileName),resultArray.toJSONString().getBytes());
+        Files.write(Paths.get(outputFileName),resultObject.toJSONString().getBytes());
     }
 
-    public static List<List<String>> calculate(List<List<String>> expressions) throws Exception {
-        List<List<String>> calculated = new ArrayList<>();
-        calculated.add(0, new ArrayList<>());
+    public List<String> calculate(List<String> expressions) throws Exception {
+        List<String> calculated = new ArrayList<>();
         for (int i = 0; i < expressions.size(); i++) {
-            for (int j = 0; j < expressions.get(i).size(); j++) {
-                RPN rpn = new RPN(expressions.get(i).get(j));
+                RPN rpn = new RPN(expressions.get(i));
                 String result = rpn.RPNToAnswer().toString();
-                calculated.get(i).add(result);
-            }
-            calculated.add(i + 1, new ArrayList<>());
+                calculated.add(result);
         }
         return calculated;
     }

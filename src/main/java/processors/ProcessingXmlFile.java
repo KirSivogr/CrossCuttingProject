@@ -17,7 +17,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcessingXmlFile {
+public class ProcessingXmlFile implements ProcessingFile{
     private static String inputFileName;
 
     public ProcessingXmlFile(String inputFName) {
@@ -46,8 +46,8 @@ public class ProcessingXmlFile {
         document.appendChild(rootElement);
 
         List<String> dataFromFile = readFromFile();
-        List<String> calculatedData = calculated(dataFromFile);
-        for(int i = 0; i < calculatedData.size();i++){
+        List<String> calculatedData = calculate(dataFromFile);
+        for(int i = 0; i < calculatedData.size(); i++){
             String element = "expression";
             Element em = document.createElement(element);
             em.appendChild(document.createTextNode(calculatedData.get(i)));
@@ -64,7 +64,7 @@ public class ProcessingXmlFile {
 
     }
 
-    public List<String> calculated(List<String> expressions) throws Exception {
+    public List<String> calculate(List<String> expressions) throws Exception {
         List<String> calculated = new ArrayList<>();
         for (int i = 0; i < expressions.size(); i++) {
             RPN rpn = new RPN(expressions.get(i));
