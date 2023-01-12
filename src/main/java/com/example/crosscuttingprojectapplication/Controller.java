@@ -1,5 +1,7 @@
 package com.example.crosscuttingprojectapplication;
 
+import archiving.ArchivingGen;
+import encrypting.EncryptGen;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.CheckBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import processors.ProcessingFile;
 import processors.ProcessingJsonFile;
 import processors.ProcessingTxtFile;
 import processors.ProcessingXmlFile;
@@ -93,12 +96,12 @@ public class Controller {
         outputButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                inputField.clear();
+                outputField.clear();
                 File file = fileChooser.showOpenDialog(primaryStage);
                 if (file != null) {
                     openFile(file);
                     List<File> files = Arrays.asList(file);
-                    printLog(inputField, files);
+                    printLog(outputField, files);
                 }
             }
         });
@@ -129,19 +132,96 @@ public class Controller {
         boolean isNeedZip = radioButtonYes.isSelected();
         boolean isNeedEncrypt = radioButtonYes1.isSelected();
         if (radioButtonJSON.isSelected()) {
-            ProcessingJsonFile pjf = new ProcessingJsonFile(inputFileName);
-            pjf.writeToFile(outputFileName);
+            name("json", isZip, isEncrypt);
         }
         else if (radioButtonTXT.isSelected()) {
-            ProcessingTxtFile ptf = new ProcessingTxtFile(inputFileName);
-            ptf.writeToFile(outputFileName);
+            name("txt", isZip, isEncrypt);
         }
         else {
-            ProcessingXmlFile pxf = new ProcessingXmlFile(inputFileName);
-            pxf.writeToFile(outputFileName);
+            name("xml", isZip, isEncrypt);
         }
+
+
         stage = (Stage) calculateButton.getScene().getWindow();
         stage.close();
     }
 
+    public void name(String typeFile, boolean isZip, boolean isEncrypt) throws Exception {
+        String inputFileName = inputField.getText();
+        String outputFileName = outputField.getText();
+        ProcessingFile pf = null;
+        if (isZip && isEncrypt) {
+            File unzipFile = getUnzipFile(inputFileName, typeFile);
+            String unzipFileName = "__fixtures__/" + unzipFile.getName();
+            File decryptFile = getDecryptFile(unzipFileName, typeFile);
+            if (typeFile == "txt") {
+                pf = new ProcessingTxtFile("__fixtures__/" + decryptFile.getName());
+            }
+            else if (typeFile == "xml") {
+                pf = new ProcessingXmlFile("__fixtures__/" + decryptFile.getName());
+            }
+            else if (typeFile == "json") {
+                pf = new ProcessingJsonFile("__fixtures__/" + decryptFile.getName());
+            }
+            pf.writeToFile(outputFileName);
+            decryptFile.delete();
+            unzipFile.delete();
+        }
+        else if (isZip) {
+            File file = getUnzipFile(inputFileName, typeFile);
+            if (typeFile == "txt") {
+                pf = new ProcessingTxtFile("__fixtures__/" + file.getName());
+            }
+            else if (typeFile == "xml") {
+                pf = new ProcessingXmlFile("__fixtures__/" + file.getName());
+            }
+            else if (typeFile == "json") {
+                pf = new ProcessingJsonFile("__fixtures__/" + file.getName());
+            }
+            pf.writeToFile(outputFileName);
+            file.delete();
+        }
+        else if (isEncrypt) {
+            File file = getDecryptFile(inputFileName, typeFile);
+            if (typeFile == "txt") {
+                pf = new ProcessingTxtFile("__fixtures__/" + file.getName());
+            }
+            else if (typeFile == "xml") {
+                pf = new ProcessingXmlFile("__fixtures__/" + file.getName());
+            }
+            else if (typeFile == "json") {
+                pf = new ProcessingJsonFile("__fixtures__/" + file.getName());
+            }
+            pf.writeToFile(outputFileName);
+            file.delete();
+        }
+        else {
+            if (typeFile == "txt") {
+                pf = new ProcessingTxtFile(inputFileName);
+            }
+            else if (typeFile == "xml") {
+                pf = new ProcessingXmlFile(inputFileName);
+            }
+            else if (typeFile == "json") {
+                pf = new ProcessingJsonFile(inputFileName);
+            }
+            pf.writeToFile(outputFileName);
+        }
+    }
+
+    public File getDecryptFile(String inputFileName, String typeOfFile) throws Exception {
+        String tempFileName = "__fixtures__/tempDecrypt." + typeOfFile;
+        File file = new File(tempFileName);
+        EncryptGen eg = new EncryptGen();
+        eg.decryptFile(inputFileName, tempFileName);
+        return file;
+    }
+
+    public File getUnzipFile(String inputFileName, String typeOfFile) throws IOException {
+        String tempFileName = "__fixtures__/tempZip." + typeOfFile;
+        File file = new File(tempFileName);
+        ArchivingGen ag = new ArchivingGen();
+        ag.unzipFile(inputFileName, tempFileName);
+        return file;
+    }
 }
