@@ -36,7 +36,7 @@ public class ProcessingXmlFile implements ProcessingFile{
         return list;
     }
 
-    public void writeToFile(String outputFileName) throws Exception {
+    public void writeResultToFile(String outputFileName) throws Exception {
         String root = "root";
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -72,5 +72,9 @@ public class ProcessingXmlFile implements ProcessingFile{
             calculated.add(result);
         }
         return calculated;
+    }
+
+    public String getFileName() {
+        return inputFileName;
     }
 }
