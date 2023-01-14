@@ -32,7 +32,7 @@ public class ProcessingJsonFile implements ProcessingFile{
         }
         return readFile;
     }
-    public void writeToFile(String outputFileName) throws Exception {
+    public void writeResultToFile(String outputFileName) throws Exception {
         List<String> dataFromFile = readFromFile();
         List<String> calculatedData = calculate(dataFromFile);
         JSONObject resultObject = new JSONObject();
@@ -50,5 +50,9 @@ public class ProcessingJsonFile implements ProcessingFile{
                 calculated.add(result);
         }
         return calculated;
+    }
+
+    public String getFileName() {
+        return inputFileName;
     }
 }
