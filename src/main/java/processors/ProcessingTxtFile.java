@@ -26,7 +26,7 @@ public class ProcessingTxtFile implements ProcessingFile {
         scanner.close();
         return result;
     }
-    public void writeToFile(String outputFileName) throws Exception {
+    public void writeResultToFile(String outputFileName) throws Exception {
         FileWriter fw = new FileWriter(outputFileName);
         List<String> dataFromFile = readFromFile();
         List<String> calculatedData = calculate(dataFromFile);
@@ -44,6 +44,10 @@ public class ProcessingTxtFile implements ProcessingFile {
             calculated.add(result);
         }
         return calculated;
+    }
+
+    public String getFileName() {
+        return inputFileName;
     }
 
 }
