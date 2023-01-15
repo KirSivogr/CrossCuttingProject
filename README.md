@@ -20,9 +20,7 @@ RPN (обратная польская запись)
 JavaFX
 
 ### UI screenshots ###
-(https://github.com/KirSivogr/CrossCuttingProject/raw/master/image/photo_2023-01-16_01-15-13.jpg)
-
-
+![photo_2023-01-14_21-07-22](https://user-images.githubusercontent.com/110250397/212570410-48b1bda3-fd5a-4843-b098-2acd9a54cb64.jpg)
 
 
 
